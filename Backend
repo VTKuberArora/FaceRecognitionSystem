@@ -1,0 +1,48 @@
+// Import necessary libraries
+const express = require('express');
+const app = express();
+const faceapi = require('face-api.js');
+const mysql = require('mysql');
+
+// Connect to database
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'attendance_db'
+});
+
+// Create API endpoint for face recognition
+app.post('/api/recognize', (req, res) => {
+    const faceDescriptors = req.body.faceDescriptors;
+    const recognizedFaces = [];
+
+    // Iterate through face descriptors and recognize faces using face API
+    faceDescriptors.forEach(descriptor => {
+        const face = faceapi.recognizeFace(descriptor);
+        if (face) {
+            recognizedFaces.push({
+                username: face.username,
+                timestamp: new Date().toISOString()
+            });
+        }
+    });
+
+    // Update attendance log in database
+    recognizedFaces.forEach(face => {
+        db.query(`INSERT INTO attendance_log (username, timestamp) VALUES (?, ?)`, [face.username, face.timestamp], (error, results) => {
+            if (error) {
+                console.error('Error updating attendance log:', error);
+            } else {
+                console.log('Attendance log updated successfully');
+            }
+        });
+    });
+
+    res.json(recognizedFaces);
+});
+
+// Start server
+app.listen(3000, () => {
+    console.log('Server started on port 3000');
+});
