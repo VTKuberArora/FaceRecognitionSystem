@@ -1,0 +1,32 @@
+**index.html** (Login Page)
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Attendance System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Form -->
+    <form id="login-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="submit" value="Login">
+    </form>
+
+    <!-- Face Recognition Camera Feed -->
+    <video id="camera-feed" width="640" height="480"></video>
+
+    <!-- Attendance Log -->
+    <div id="attendance-log">
+        <h2>Attendance Log</h2>
+        <ul id="attendance-list"></ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
